@@ -9,7 +9,7 @@ exports.enrollCourse = async (req, res) => {
         const existingEnrollment = await Enrollment.findByCourseIdAndUserId(courseId, userId);
         if (existingEnrollment) {
             return res.status(400).json({
-                message: 'User is already enrolled in the course',
+                message: 'You already enrolled in the course',
                 result: false
             });
         }
@@ -29,6 +29,7 @@ exports.enrollCourse = async (req, res) => {
         });
     }
 };
+
 
 exports.getAllEnrollments = async (req, res) => {
     try {
@@ -131,5 +132,21 @@ exports.getCountByDepartment = async (req, res) => {
         });
     }
 };
+
+exports.getCourseByUserId = async (req, res) => {
+    const userId = req.params.user_id;
+    try {
+        const courses = await Enrollment.getCourseByUserId(userId);
+        res.status(200).json({
+            courses
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'Fail to get courses by user_id',
+            error: error.message
+        })
+    }
+
+}
 
 
